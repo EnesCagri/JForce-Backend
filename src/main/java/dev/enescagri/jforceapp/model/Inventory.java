@@ -1,25 +1,48 @@
 package dev.enescagri.jforceapp.model;
 
+import dev.enescagri.jforceapp.enums.InventoryStatus;
+import dev.enescagri.jforceapp.enums.InventoryType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "inventories")
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private String type;
+    private InventoryType type;
+
+    @NotBlank
+    @Size(min = 2, max = 50)
     @Column(name = "brand")
     private String brand;
 
+    @NotBlank
+    @Size(min = 2, max = 50)
     @Column(name = "model")
     private String model;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private InventoryStatus status;
+
+    @NotNull
     @Column(name = "date")
     private LocalDate date;
 
@@ -30,83 +53,5 @@ public class Inventory {
     private String currentOwner;
 
 
-    public Inventory(){
 
-    }
-
-    public Inventory(String type, String brand, String model, String status, LocalDate date, String lastOwner, String currentOwner) {
-        super();
-        this.type = type;
-        this.brand = brand;
-        this.model = model;
-        this.status = status;
-        this.date = date;
-        this.lastOwner = "-";
-        this.currentOwner = "Boşta";
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getLastOwner() {
-        return lastOwner;
-    }
-
-    public void setLastOwner(String lastOwner) {
-        this.lastOwner = lastOwner;
-    }
-
-    public String getCurrentOwner() {
-        return currentOwner;
-    }
-
-    public void setCurrentOwner(String currentOwner) {
-        this.currentOwner = currentOwner;
-    }
 }

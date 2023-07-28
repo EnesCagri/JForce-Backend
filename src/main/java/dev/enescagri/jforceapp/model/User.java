@@ -1,61 +1,34 @@
 package dev.enescagri.jforceapp.model;
 
+import dev.enescagri.jforceapp.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "userName")
+    @NotBlank
+    @Size(min = 2, max = 20)
+    @Column(name = "user_name")
     private String userName;
+    @NotBlank
+    @Size(min = 5, max = 20)
     @Column(name = "password")
     private String password;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private String role;
-
-    public User() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public User(String userName, String password, String role) {
-        this.userName = userName;
-        this.password = password;
-        this.role = role;
-    }
+    private Role role;
 }

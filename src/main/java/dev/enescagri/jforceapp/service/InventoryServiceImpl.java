@@ -1,8 +1,8 @@
 package dev.enescagri.jforceapp.service;
 
-import dev.enescagri.jforceapp.model.Employee;
 import dev.enescagri.jforceapp.model.Inventory;
 import dev.enescagri.jforceapp.repository.InventoryRepository;
+import dev.enescagri.jforceapp.service_interface.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,22 +13,25 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class InventoryService {
+public class InventoryServiceImpl implements InventoryService {
     @Autowired
     private InventoryRepository inventoryRepository;
-
+    @Override
     public List<Inventory> getAllInventory(){
         return inventoryRepository.findAll();
     }
 
+    @Override
     public Inventory createInventory(Inventory inventory){
         return inventoryRepository.save(inventory);
     }
 
+    @Override
     public Optional<Inventory> getInventoryById(Long id){
         return inventoryRepository.findById(id);
     }
 
+    @Override
     public Optional<Inventory> updateInventory(Long id, Inventory employeeDetails){
         Optional<Inventory> inventoryOptional = getInventoryById(id);
 
@@ -43,10 +46,10 @@ public class InventoryService {
             inventoryRepository.save(inventory);
             return Optional.of(inventory);
         }
-
         return Optional.empty();
     }
 
+    @Override
     public ResponseEntity<Map<String, Boolean>> deleteInventory(Long id){
         Optional<Inventory> inventoryOptional = getInventoryById(id);
         Map<String, Boolean> response = new HashMap<>();
