@@ -1,5 +1,8 @@
 package dev.enescagri.jforceapp.service;
 
+import dev.enescagri.jforceapp.dto.EmployeeDTO;
+import dev.enescagri.jforceapp.dto.EmployeeDetailsDTO;
+import dev.enescagri.jforceapp.dto.InventoryDTO;
 import dev.enescagri.jforceapp.enums.InventoryStatus;
 import dev.enescagri.jforceapp.enums.WorkingStatus;
 import dev.enescagri.jforceapp.model.Employee;
@@ -7,19 +10,27 @@ import dev.enescagri.jforceapp.model.Inventory;
 import dev.enescagri.jforceapp.repository.EmployeeRepository;
 import dev.enescagri.jforceapp.repository.InventoryRepository;
 import dev.enescagri.jforceapp.service_interface.EmployeeService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+    private final EmployeeRepository employeeRepository;
+    private final InventoryRepository inventoryRepository;
+
     @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private InventoryRepository inventoryRepository;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, InventoryRepository inventoryRepository) {
+        this.employeeRepository = employeeRepository;
+        this.inventoryRepository = inventoryRepository;
+    }
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public List<Employee> getAllEmployees(){
@@ -79,7 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 inventory.setStatus(InventoryStatus.DEPOT);
                 inventory.setDate(LocalDate.now());
                 inventory.setLastOwner(employee.getFirstName() + " " + employee.getLastName());
-                inventory.setCurrentOwner("Boşta");
+                inventory.setCurrentOwner("-");
             }
 
             employee.getInventories().clear();
@@ -172,6 +183,42 @@ public class EmployeeServiceImpl implements EmployeeService {
         response.put("not found", Boolean.TRUE);
         return ResponseEntity.notFound().build();
     }
+
+    //  DTO
+
+    private EmployeeDTO convertEntityToDTO(Employee employee){
+        return modelMapper.map(employee, EmployeeDTO.class);
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployeeDTOs(){
+        return employeeRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    private EmployeeDetailsDTO convertEntityToDetailsDTO(Employee employee){
+        return modelMapper.map(employee, EmployeeDetailsDTO.class);
+    }
+
+    @Override
+    public Optional<EmployeeDetailsDTO> getEmployeeDTOById(Long id) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+
+        return optionalEmployee.map(employee -> modelMapper.map(employee, EmployeeDetailsDTO.class));
+
+    }
+    @Override
+    public List<InventoryDTO> getAllInventoryDTOs(Long employeeId) {
+        return employeeRepository.findInventoriesById(employeeId)
+                .stream()
+                .map(inventory -> modelMapper.map(inventory, InventoryDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
 
 
 

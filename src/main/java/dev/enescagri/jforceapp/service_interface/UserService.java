@@ -1,5 +1,6 @@
 package dev.enescagri.jforceapp.service_interface;
 
+import dev.enescagri.jforceapp.dto.UserDTO;
 import dev.enescagri.jforceapp.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,8 @@ public interface UserService {
     ResponseEntity<Map<String, Boolean>> deleteUser(Long id);
 
     Optional<User> loginUser(String userName, String password);
+
+    List<UserDTO> getAllUserDTOs();
+    Optional<UserDTO> getUserDTOById(Long id);
+
 }

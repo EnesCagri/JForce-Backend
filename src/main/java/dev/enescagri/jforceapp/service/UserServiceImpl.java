@@ -1,8 +1,11 @@
 package dev.enescagri.jforceapp.service;
 
+
+import dev.enescagri.jforceapp.dto.UserDTO;
 import dev.enescagri.jforceapp.model.User;
 import dev.enescagri.jforceapp.repository.UserRepository;
 import dev.enescagri.jforceapp.service_interface.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,13 +14,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final UserRepository userRepository;
     @Autowired
-    private UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
+
+    private final ModelMapper modelMapper = new ModelMapper();
     @Override
     public List<User> getAllUsers(){
         return userRepository.findAll();
@@ -79,4 +88,29 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findByUserNameAndPassword(userName, password);
     }
+
+    //  DTO
+    private UserDTO convertEntityToDTO(User user){
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public List<UserDTO> getAllUserDTOs(){
+        return userRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private UserDTO convertEntityToDetailsDTO(User user){
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public Optional<UserDTO> getUserDTOById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        return optionalUser.map(this::convertEntityToDetailsDTO);
+    }
 }
+

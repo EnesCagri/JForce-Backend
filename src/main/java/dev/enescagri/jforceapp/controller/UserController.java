@@ -1,5 +1,6 @@
 package dev.enescagri.jforceapp.controller;
 
+import dev.enescagri.jforceapp.dto.UserDTO;
 import dev.enescagri.jforceapp.model.User;
 import dev.enescagri.jforceapp.service.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -17,31 +18,35 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class UserController {
 
+    private final UserServiceImpl userService;
+
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
-    public List<User> getAllUsers(){
-        return userServiceImpl.getAllUsers();
+    public List<UserDTO> getAllUsers(){
+        return userService.getAllUserDTOs();
     }
 
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody User inventory){
-        return userServiceImpl.createUser(inventory);
+        return userService.createUser(inventory);
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id){
-        return new ResponseEntity<>(userServiceImpl.getUserById(id), HttpStatus.OK);
+    public ResponseEntity<Optional<UserDTO>> getUserById(@PathVariable Long id){
+        return new ResponseEntity<>(userService.getUserDTOById(id), HttpStatus.OK);
     }
     @PutMapping("/users/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id, @RequestBody User userDetails){
-        return new ResponseEntity<>(userServiceImpl.updateUser(id, userDetails), HttpStatus.OK);
+    public ResponseEntity<Optional<User>> updateUserById(@PathVariable Long id, @RequestBody User userDetails){
+        return new ResponseEntity<>(userService.updateUser(id, userDetails), HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id){
-        return userServiceImpl.deleteUser(id);
+        return userService.deleteUser(id);
     }
 
     @PostMapping("/login")
@@ -49,7 +54,7 @@ public class UserController {
         String userName = loginReq.getUserName();
         String password = loginReq.getPassword();
 
-        Optional<User> optionalUser = userServiceImpl.loginUser(userName, password);
+        Optional<User> optionalUser = userService.loginUser(userName, password);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

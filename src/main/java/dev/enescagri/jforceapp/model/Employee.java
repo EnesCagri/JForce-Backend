@@ -61,8 +61,8 @@ public class Employee {
     private MartialStatus martialStatus;
 
     @Lob
-    @Column(name = "profile_pic")
-    private Byte[] profilePic;
+    @Column(name = "profile_pic", columnDefinition = "LONGTEXT")
+    private String profilePic;
 
     @NotNull
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,8 @@
 package dev.enescagri.jforceapp.service_interface;
 
+import dev.enescagri.jforceapp.dto.EmployeeDTO;
+import dev.enescagri.jforceapp.dto.EmployeeDetailsDTO;
+import dev.enescagri.jforceapp.dto.InventoryDTO;
 import dev.enescagri.jforceapp.model.Employee;
 import dev.enescagri.jforceapp.model.Inventory;
 import org.springframework.http.ResponseEntity;
@@ -29,4 +32,10 @@ public interface EmployeeService {
     Employee addInventoryById(Long employeeId, Long inventoryId);
 
     ResponseEntity<Map<String, Boolean>> discardInventoryFromEmployee(Long employeeId, Long inventoryId);
+
+    Optional<EmployeeDetailsDTO> getEmployeeDTOById(Long id);
+
+    List<EmployeeDTO> getAllEmployeeDTOs();
+    List<InventoryDTO> getAllInventoryDTOs(Long employeeId);
+
 }

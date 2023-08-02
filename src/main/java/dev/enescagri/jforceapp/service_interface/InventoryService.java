@@ -1,5 +1,6 @@
 package dev.enescagri.jforceapp.service_interface;
 
+import dev.enescagri.jforceapp.dto.InventoryDTO;
 import dev.enescagri.jforceapp.model.Inventory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,8 @@ public interface InventoryService {
     Optional<Inventory> updateInventory(Long id, Inventory employeeDetails);
 
     ResponseEntity<Map<String, Boolean>> deleteInventory(Long id);
+
+    List<InventoryDTO> getAllInventoryDTOs();
+
 
 }

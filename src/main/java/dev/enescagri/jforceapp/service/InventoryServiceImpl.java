@@ -1,8 +1,12 @@
 package dev.enescagri.jforceapp.service;
 
+
+import dev.enescagri.jforceapp.dto.InventoryDTO;
+import dev.enescagri.jforceapp.dto.InventoryDetailsDTO;
 import dev.enescagri.jforceapp.model.Inventory;
 import dev.enescagri.jforceapp.repository.InventoryRepository;
 import dev.enescagri.jforceapp.service_interface.InventoryService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,11 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
+    private final InventoryRepository inventoryRepository;
     @Autowired
-    private InventoryRepository inventoryRepository;
+    public InventoryServiceImpl(InventoryRepository inventoryRepository) {
+        this.inventoryRepository = inventoryRepository;
+    }
+
+    private final ModelMapper modelMapper = new ModelMapper();
     @Override
     public List<Inventory> getAllInventory(){
         return inventoryRepository.findAll();
@@ -66,4 +76,27 @@ public class InventoryServiceImpl implements InventoryService {
 
         return ResponseEntity.notFound().build();
     }
+
+    //  DTO
+    private InventoryDTO convertEntityToDTO(Inventory inventory){
+        return modelMapper.map(inventory, InventoryDTO.class);
+    }
+
+    public List<InventoryDTO> getAllInventoryDTOs(){
+        return inventoryRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private InventoryDetailsDTO convertEntityToDetailsDTO(Inventory inventory){
+        return modelMapper.map(inventory, InventoryDetailsDTO.class);
+    }
+
+    public Optional<InventoryDetailsDTO> getInventoryDTOById(Long id) {
+        Optional<Inventory> optionalInventory = inventoryRepository.findById(id);
+
+        return optionalInventory.map(this::convertEntityToDetailsDTO);
+    }
+
 }
