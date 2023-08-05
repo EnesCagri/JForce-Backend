@@ -1,9 +1,21 @@
 package dev.enescagri.jforceapp.enums;
 
-public enum InventoryType {
-    CAR,
-    MOUSE,
-    KEYBOARD,
-    DISK,
-    MONITOR
+import dev.enescagri.jforceapp.enum_converter.DisplayNameEnum;
+
+public enum InventoryType implements DisplayNameEnum {
+    CAR("Araba"),
+    MOUSE("Fare"),
+    KEYBOARD("Klavye"),
+    DISK("Disk"),
+    MONITOR("Monitör");
+
+    private final String label;
+
+    InventoryType(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 }

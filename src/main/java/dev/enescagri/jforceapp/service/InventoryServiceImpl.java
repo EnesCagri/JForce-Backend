@@ -79,9 +79,21 @@ public class InventoryServiceImpl implements InventoryService {
 
     //  DTO
     private InventoryDTO convertEntityToDTO(Inventory inventory){
-        return modelMapper.map(inventory, InventoryDTO.class);
+        InventoryDTO inventoryDTO = modelMapper.map(inventory, InventoryDTO.class);
+        inventoryDTO.setType(inventory.getType().getLabel());
+        inventoryDTO.setStatus(inventory.getStatus().getLabel());
+
+        return inventoryDTO;
+    }
+    private InventoryDetailsDTO convertEntityToDetailsDTO(Inventory inventory){
+        InventoryDetailsDTO inventoryDetailsDTO = modelMapper.map(inventory, InventoryDetailsDTO.class);
+        inventoryDetailsDTO.setType(inventory.getType().getLabel());
+        inventoryDetailsDTO.setStatus(inventory.getStatus().getLabel());
+
+        return inventoryDetailsDTO;
     }
 
+    @Override
     public List<InventoryDTO> getAllInventoryDTOs(){
         return inventoryRepository.findAll()
                 .stream()
@@ -89,8 +101,12 @@ public class InventoryServiceImpl implements InventoryService {
                 .collect(Collectors.toList());
     }
 
-    private InventoryDetailsDTO convertEntityToDetailsDTO(Inventory inventory){
-        return modelMapper.map(inventory, InventoryDetailsDTO.class);
+    @Override
+    public List<InventoryDetailsDTO> getAllInventoryDetailDTOs(){
+        return inventoryRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDetailsDTO)
+                .collect(Collectors.toList());
     }
 
     public Optional<InventoryDetailsDTO> getInventoryDTOById(Long id) {

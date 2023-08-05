@@ -2,7 +2,7 @@ package dev.enescagri.jforceapp.controller;
 
 import dev.enescagri.jforceapp.dto.EmployeeDTO;
 import dev.enescagri.jforceapp.dto.EmployeeDetailsDTO;
-import dev.enescagri.jforceapp.dto.InventoryDTO;
+import dev.enescagri.jforceapp.dto.InventoryDetailsDTO;
 import dev.enescagri.jforceapp.model.Employee;
 import dev.enescagri.jforceapp.service.EmployeeServiceImpl;
 import jakarta.validation.Valid;
@@ -52,7 +52,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{employeeId}/inventories")
-    public List<InventoryDTO> getAllInventories(@PathVariable Long employeeId) {
+    public List<InventoryDetailsDTO> getAllInventories(@PathVariable Long employeeId) {
         return employeeService.getAllInventoryDTOs(employeeId);
     }
 

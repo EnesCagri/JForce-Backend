@@ -1,11 +1,11 @@
 package dev.enescagri.jforceapp.model;
 
+import dev.enescagri.jforceapp.enum_converter.InventoryStatusConverter;
+import dev.enescagri.jforceapp.enum_converter.InventoryTypeConverter;
 import dev.enescagri.jforceapp.enums.InventoryStatus;
 import dev.enescagri.jforceapp.enums.InventoryType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 
@@ -23,7 +23,7 @@ public class Inventory {
     private Long id;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = InventoryTypeConverter.class)
     @Column(name = "type")
     private InventoryType type;
 
@@ -38,11 +38,12 @@ public class Inventory {
     private String model;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = InventoryStatusConverter.class)
     @Column(name = "status")
     private InventoryStatus status;
 
     @NotNull
+    @PastOrPresent
     @Column(name = "date")
     private LocalDate date;
 

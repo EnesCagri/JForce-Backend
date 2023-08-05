@@ -1,6 +1,6 @@
 package dev.enescagri.jforceapp.dto;
 
-import dev.enescagri.jforceapp.enums.*;
+
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -12,17 +12,17 @@ public class EmployeeDetailsDTO {
     private String firstName;
     private String lastName;
     private String tckn;
-    private Gender gender;
+    private String gender;
     private LocalDate birthDate;
     private LocalDate enteranceDate;
     private LocalDate leaveDate;
-    private MartialStatus martialStatus;
+    private String martialStatus;
     private String profilePic;
-    private WorkingStatus workingStatus;
-    private Department department;
-    private Position mission;
-    private Department enteranceDepartment;
-    private Position enteranceMission;
-    private GraduationStatus graduationStatus;
+    private String workingStatus;
+    private String department;
+    private String mission;
+    private String enteranceDepartment;
+    private String enteranceMission;
+    private String graduationStatus;
     private String leaveReason;
 }

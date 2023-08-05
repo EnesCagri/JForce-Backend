@@ -1,6 +1,7 @@
 package dev.enescagri.jforceapp.model;
 
 
+import dev.enescagri.jforceapp.enum_converter.*;
 import dev.enescagri.jforceapp.enums.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "employees", uniqueConstraints = @UniqueConstraint(columnNames = "tckn"))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,19 +36,21 @@ public class Employee {
     @NotBlank
     @Size(min = 11, max = 11)
     @Digits(integer = 11, fraction = 0)
-    @Column(name = "tckn")
+    @Column(name = "tckn", unique = true)
     private String tckn;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = GenderConverter.class)
     @Column(name = "gender")
     private Gender gender;
 
     @NotNull
+    @Past
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @NotNull
+    @Past
     @Column(name = "enterance_date")
     private LocalDate enteranceDate;
 
@@ -56,7 +59,7 @@ public class Employee {
     private LocalDate leaveDate;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = MartialStatusConverter.class)
     @Column(name = "marital_status")
     private MartialStatus martialStatus;
 
@@ -65,32 +68,32 @@ public class Employee {
     private String profilePic;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = WorkingStatusConverter.class)
     @Column(name = "working_status")
     private WorkingStatus workingStatus;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DepartmentConverter.class)
     @Column(name = "department")
     private Department department;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = PositionConverter.class)
     @Column(name = "mission")
     private Position mission;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DepartmentConverter.class)
     @Column(name = "enterance_department")
     private Department enteranceDepartment;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = PositionConverter.class)
     @Column(name = "enterance_mission")
     private Position enteranceMission;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = GraduationStatusConverter.class)
     @Column(name = "graduation_status")
     private GraduationStatus graduationStatus;
 

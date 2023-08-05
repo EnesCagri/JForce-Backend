@@ -2,7 +2,7 @@ package dev.enescagri.jforceapp.service;
 
 import dev.enescagri.jforceapp.dto.EmployeeDTO;
 import dev.enescagri.jforceapp.dto.EmployeeDetailsDTO;
-import dev.enescagri.jforceapp.dto.InventoryDTO;
+import dev.enescagri.jforceapp.dto.InventoryDetailsDTO;
 import dev.enescagri.jforceapp.enums.InventoryStatus;
 import dev.enescagri.jforceapp.enums.WorkingStatus;
 import dev.enescagri.jforceapp.model.Employee;
@@ -185,9 +185,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     //  DTO
-
     private EmployeeDTO convertEntityToDTO(Employee employee){
-        return modelMapper.map(employee, EmployeeDTO.class);
+        EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+        employeeDTO.setWorkingStatus(employee.getWorkingStatus().getLabel());
+        employeeDTO.setMission(employee.getMission().getLabel());
+        employeeDTO.setDepartment(employee.getDepartment().getLabel());
+
+        return employeeDTO;
+    }
+
+    private EmployeeDetailsDTO convertEntityToDetailsDTO(Employee employee){
+        EmployeeDetailsDTO employeeDetailsDTO = modelMapper.map(employee, EmployeeDetailsDTO.class);
+
+        employeeDetailsDTO.setWorkingStatus(employee.getWorkingStatus().getLabel());
+        employeeDetailsDTO.setMission(employee.getMission().getLabel());
+        employeeDetailsDTO.setDepartment(employee.getDepartment().getLabel());
+        employeeDetailsDTO.setGender(employee.getGender().getLabel());
+        employeeDetailsDTO.setEnteranceDepartment(employee.getEnteranceDepartment().getLabel());
+        employeeDetailsDTO.setEnteranceMission(employee.getEnteranceMission().getLabel());
+        employeeDetailsDTO.setGraduationStatus(employee.getGraduationStatus().getLabel());
+        employeeDetailsDTO.setMartialStatus(employee.getMartialStatus().getLabel());
+
+        return employeeDetailsDTO;
     }
 
     @Override
@@ -198,25 +217,47 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.toList());
     }
 
-
-    private EmployeeDetailsDTO convertEntityToDetailsDTO(Employee employee){
-        return modelMapper.map(employee, EmployeeDetailsDTO.class);
-    }
-
     @Override
     public Optional<EmployeeDetailsDTO> getEmployeeDTOById(Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
 
-        return optionalEmployee.map(employee -> modelMapper.map(employee, EmployeeDetailsDTO.class));
+        if (!optionalEmployee.isPresent()) return Optional.empty();
+
+        Employee employee = optionalEmployee.get();
+        EmployeeDetailsDTO employeeDetailsDTO = modelMapper.map(employee, EmployeeDetailsDTO.class);
+
+        employeeDetailsDTO.setWorkingStatus(employee.getWorkingStatus().getLabel());
+        employeeDetailsDTO.setMission(employee.getMission().getLabel());
+        employeeDetailsDTO.setDepartment(employee.getDepartment().getLabel());
+        employeeDetailsDTO.setGender(employee.getGender().getLabel());
+        employeeDetailsDTO.setEnteranceDepartment(employee.getEnteranceDepartment().getLabel());
+        employeeDetailsDTO.setEnteranceMission(employee.getEnteranceMission().getLabel());
+        employeeDetailsDTO.setGraduationStatus(employee.getGraduationStatus().getLabel());
+        employeeDetailsDTO.setMartialStatus(employee.getMartialStatus().getLabel());
+
+        return Optional.of(employeeDetailsDTO);
 
     }
+
     @Override
-    public List<InventoryDTO> getAllInventoryDTOs(Long employeeId) {
-        return employeeRepository.findInventoriesById(employeeId)
-                .stream()
-                .map(inventory -> modelMapper.map(inventory, InventoryDTO.class))
+    public List<InventoryDetailsDTO> getAllInventoryDTOs(Long employeeId) {
+        List<Optional<Inventory>> inventories = getAllInventories(employeeId);
+
+        return inventories.stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::convertEntityToDetailsDTO)
                 .collect(Collectors.toList());
     }
+
+    private InventoryDetailsDTO convertEntityToDetailsDTO(Inventory inventory) {
+        InventoryDetailsDTO inventoryDetailsDTO = modelMapper.map(inventory, InventoryDetailsDTO.class);
+        inventoryDetailsDTO.setType(inventory.getType().getLabel());
+        inventoryDetailsDTO.setStatus(inventory.getStatus().getLabel());
+
+        return inventoryDetailsDTO;
+    }
+
 
 
 

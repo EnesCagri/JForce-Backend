@@ -31,6 +31,11 @@ public class InventoryController {
         return inventoryService.getAllInventoryDTOs();
     }
 
+    @GetMapping("/inventories/details")
+    public List<InventoryDetailsDTO> getAllInventoriesDetails(){
+        return inventoryService.getAllInventoryDetailDTOs();
+    }
+
     @PostMapping("/inventories")
     public Inventory createInventory(@Valid @RequestBody Inventory inventory){
         return inventoryService.createInventory(inventory);
