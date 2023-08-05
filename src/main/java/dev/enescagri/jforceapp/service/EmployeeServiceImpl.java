@@ -5,6 +5,7 @@ import dev.enescagri.jforceapp.dto.EmployeeDetailsDTO;
 import dev.enescagri.jforceapp.dto.InventoryDetailsDTO;
 import dev.enescagri.jforceapp.enums.InventoryStatus;
 import dev.enescagri.jforceapp.enums.WorkingStatus;
+import dev.enescagri.jforceapp.exception.ResourceNotFoundException;
 import dev.enescagri.jforceapp.model.Employee;
 import dev.enescagri.jforceapp.model.Inventory;
 import dev.enescagri.jforceapp.repository.EmployeeRepository;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -151,7 +151,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             return employeeRepository.save(employee);
         }
 
-        throw new RuntimeException();
+        throw new ResourceNotFoundException("Resource not found");
     }
 
     @Override
@@ -214,14 +214,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public Optional<EmployeeDetailsDTO> getEmployeeDTOById(Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
 
-        if (!optionalEmployee.isPresent()) return Optional.empty();
+        if (optionalEmployee.isEmpty()) return Optional.empty();
 
         Employee employee = optionalEmployee.get();
         EmployeeDetailsDTO employeeDetailsDTO = modelMapper.map(employee, EmployeeDetailsDTO.class);
@@ -247,7 +247,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(this::convertEntityToDetailsDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private InventoryDetailsDTO convertEntityToDetailsDTO(Inventory inventory) {

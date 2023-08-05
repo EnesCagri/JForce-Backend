@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -98,7 +97,7 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -106,7 +105,7 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDetailsDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Optional<InventoryDetailsDTO> getInventoryDTOById(Long id) {
