@@ -6,3 +6,6 @@
 - DTO'lar (Veri Transfer Nesneleri): Veri alışverişini optimize etmek ve yapılandırmayı sağlamak için her model özelinde birden fazla DTO oluşturuldu. Bu DTO'lar projenin farklı kısımlarında kullanılmaktadır.
 - Dependency Injection: Proje Dependency Injection prensiplerine sıkı sıkıya bağlı kalarak, etkin ve sağlam bir performans sunmak üzere constructor enjeksiyonu tasarlanmıştır.
 
+- Generic Converter sınıfı oluşturuldu
+- Enum'lara özel oluşturulan converter sınıflar bu generic converter sınıfı inherit etti
+
