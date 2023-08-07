@@ -18,10 +18,10 @@ public class GenericConverter<T extends Enum<T> & DisplayNameEnum> implements At
                 return enumConstant;
             }
         }
-        throw new IllegalArgumentException("Invalid type label: " + label);
+        throw new IllegalArgumentException("Invalid label: " + label);
     }
 
     protected Class<T> getEnumClass() {
-        throw new UnsupportedOperationException("You must implement this method.");
+        throw new UnsupportedOperationException("Method not implemented.");
     }
 }

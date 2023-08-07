@@ -4,7 +4,7 @@ import dev.enescagri.jforceapp.enum_converter.DisplayNameEnum;
 
 public enum Position implements DisplayNameEnum {
     DEVELOPER("Yazılım Geliştirme Uzmanı"),
-    ASSISTANT("Yönetici Asitanı"),
+    ASSISTANT("Yönetici Asistanı"),
     CHIEF("Yönetici");
 
     private final String label;
